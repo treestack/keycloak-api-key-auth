@@ -1,4 +1,8 @@
-![](https://img.shields.io/badge/warning-probably_not_a_good_idea-red)
+[![Maven CI/CD](https://github.com/treestack/keycloak-api-key-auth/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/treestack/keycloak-api-key-auth/actions/workflows/maven-publish.yml)
+![License](https://img.shields.io/github/license/treestack/keycloak-api-key-auth)
+![Warning](https://img.shields.io/badge/Warning-probably_not_a_good_idea-red)
+![Release](https://img.shields.io/github/v/release/treestack/keycloak-api-key-auth)
+
 
 # Keycloak API Key authenticator
 
