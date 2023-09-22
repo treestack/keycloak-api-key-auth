@@ -85,6 +85,8 @@ If you want to generate API keys automatically upon user creation, go to the rea
 
 Now an API key will be generated for you for each new user.
 
+Thanks to https://github.com/p2-inc/keycloak-events for the code!
+
 ## Usage
 
 You can now exchange the API key for tokens by sending a POST request to the Token endpoint of your realm, very
