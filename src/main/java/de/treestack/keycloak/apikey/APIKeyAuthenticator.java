@@ -1,6 +1,7 @@
 package de.treestack.keycloak.apikey;
 
-import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
@@ -12,43 +13,51 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.provider.ProviderConfigProperty;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class APIKeyAuthenticator extends AbstractDirectGrantAuthenticator {
 
     public static final String PROVIDER_ID = "direct-grant-validate-api-key";
-    public static final String ATTRIBUTE_API_KEY_ATTRIBUTE = "attribute.apikey.attribute";
+    public static final String API_KEY_ATTRIBUTE = "api-key";
     public static final String API_KEY_FORM_FIELD = "api_key";
-    private static final List<ProviderConfigProperty> configProperties = new ArrayList<>();
 
-    protected String retrieveApiKey(AuthenticationFlowContext context) {
-        MultivaluedMap<String, String> inputData = context.getHttpRequest().getDecodedFormParameters();
+    /**
+     * Load API key from request form parameters
+     *
+     * @param context AuthenticationFlowContext
+     * @return api key if found, null otherwise
+     */
+    @Nullable
+    protected String retrieveApiKey(@NotNull AuthenticationFlowContext context) {
+        final var inputData = context.getHttpRequest().getDecodedFormParameters();
         return inputData.getFirst(API_KEY_FORM_FIELD);
     }
 
-    protected UserModel findUserByApiKey(AuthenticationFlowContext context, String apiKey) {
-        String userAttribute = context.getAuthenticatorConfig().getConfig().get(ATTRIBUTE_API_KEY_ATTRIBUTE);
-        UserModel user = context.getSession().users()
-                .searchForUserByUserAttributeStream(context.getRealm(), userAttribute, apiKey)
+    /**
+     * Load user by api key attribute.
+     *
+     * @param context AuthenticationFlowContext
+     * @param apiKey the api key
+     * @return user if found, null otherwise
+     */
+    @Nullable
+    protected UserModel findUserByApiKey(@NotNull AuthenticationFlowContext context, @NotNull String apiKey) {
+        return context.getSession().users()
+                .searchForUserByUserAttributeStream(context.getRealm(), API_KEY_ATTRIBUTE, apiKey)
                 .findAny().orElse(null);
-        return user;
     }
 
-    static {
-        ProviderConfigProperty property;
-        property = new ProviderConfigProperty();
-        property.setName(ATTRIBUTE_API_KEY_ATTRIBUTE);
-        property.setLabel("User attribute");
-        property.setHelpText("User attribute that contains the API key");
-        property.setDefaultValue("api-key");
-        property.setType(ProviderConfigProperty.STRING_TYPE);
-        configProperties.add(property);
-    }
-
-    @Override
+    /**
+     * Reads api key from request and looks up user by api key.
+     * Will set the user and succeed the flow if authentication was successful
+     * or fail with 401 UNAUTHORIZED if the api key form field is missing or if
+     * no user was found for the given api key.
+     *
+     * @param context AuthenticationFlowContext
+     */
     public void authenticate(AuthenticationFlowContext context) {
-        var apiKey = retrieveApiKey(context);
+        final var apiKey = retrieveApiKey(context);
         if (apiKey == null) {
             context.getEvent().error(Errors.INVALID_USER_CREDENTIALS);
             Response challengeResponse = errorResponse(Response.Status.UNAUTHORIZED.getStatusCode(), "invalid_request", "Missing parameter: " + API_KEY_FORM_FIELD);
@@ -56,7 +65,7 @@ public class APIKeyAuthenticator extends AbstractDirectGrantAuthenticator {
             return;
         }
 
-        UserModel user = findUserByApiKey(context, apiKey);
+        final var user = findUserByApiKey(context, apiKey);
         if (user == null) {
             context.getEvent().error(Errors.INVALID_USER_CREDENTIALS);
             Response challengeResponse = errorResponse(Response.Status.UNAUTHORIZED.getStatusCode(), "invalid_request", "Invalid api key");
@@ -80,7 +89,6 @@ public class APIKeyAuthenticator extends AbstractDirectGrantAuthenticator {
 
     @Override
     public void setRequiredActions(KeycloakSession session, RealmModel realm, UserModel user) {
-
     }
 
     @Override
@@ -106,7 +114,7 @@ public class APIKeyAuthenticator extends AbstractDirectGrantAuthenticator {
 
     @Override
     public List<ProviderConfigProperty> getConfigProperties() {
-        return configProperties;
+        return Collections.emptyList();
     }
 
     @Override
