@@ -1,4 +1,4 @@
-package de.treestack.keycloak.token.provider;
+package de.treestack.keycloak.apikey;
 
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;

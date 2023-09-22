@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.treestack.keycloak</groupId>
-    <artifactId>token-spi</artifactId>
+    <artifactId>api-key-spi</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -47,36 +47,5 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Dependencies>org.keycloak.keycloak-server-spi-private,org.keycloak.keycloak-server-spi,org.keycloak.keycloak-services</Dependencies>
-                        </manifestEntries>
-                    </archive>
-                    <outputDirectory>../keycloak/providers</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
