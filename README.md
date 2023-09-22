@@ -1,21 +1,32 @@
+![](https://img.shields.io/badge/warning-probably_not_a_good_idea-red)
+
 # Keycloak API Key authenticator
 
-This Authentication SPI allows the "misuse" of the Resource Owner Password Credentials grant to identify an user by 
+This Authentication SPI allows the "misuse" of the Resource Owner Password Credentials grant to identify an user by
 a pre-generated API key stored as a user attribute.
 
 **Before using this SPI, please keep in mind that exposing user credentials like API keys to the outside world
 significantly increases the attack surface of your application.**
 
-Read this for more information: https://www.scottbrady91.com/oauth/why-the-resource-owner-password-credentials-grant-type-is-not-authentication-nor-suitable-for-modern-applications
+This creates a way to impersonate an user just by knowing an API key that cannot be revoked by the user
+unless you remove the user attribute in Keycloak.
 
-## Resource Owner Password Credentials
+## Resource Owner Password Credentials grant
 
-OAuth's Resource Owner Password Credentials (ROPC) grant type, also known as the "password grant," was designed as a 
-means of migrating legacy authentication mechanisms to an OAuth tokenized architecture. It essentially swaps user 
-credentials for tokens without properly obtaining the user's consent or conducting proper identification. 
+OAuth's Resource Owner Password Credentials (ROPC) grant type, also known as the "password grant," was designed as a
+means of migrating legacy authentication mechanisms to an OAuth tokenized architecture. It essentially swaps user
+credentials for tokens without properly obtaining the user's consent or conducting proper identification.
 
-It is only suitable in low security cases where the resource owner has a trust relationship with the client, so please 
-be aware of the security implications.
+Instead of sending the username and password, we will instead send an API key that's stored as an user attribute.
+
+This is only suitable for **low security applications** where
+- the resource owner has a trust relationship with the client,
+- proper user identification isn't critical,
+- we don't care about user consent.
+
+Please be aware of the security implications.
+
+Further reading: https://www.scottbrady91.com/oauth/why-the-resource-owner-password-credentials-grant-type-is-not-authentication-nor-suitable-for-modern-applications
 
 ## Requirements
 
@@ -23,10 +34,12 @@ This module was developed for Keycloak 22. For earlier versions please see https
 
 ## Build and deploy
 
+If you still think this is a good idea or have a very niche edge case:
+
 Execute `mvn package` in the root directory. The deployable JAR file will be created in the `target/`-folder.
 
-Copy the jar file into Keycloaks `providers` directory. If you use the official Docker container you can mount a volume 
-at `/opt/keycloak/providers`. 
+Copy the jar file into Keycloaks `providers` directory. If you use the official Docker container you can mount a volume
+at `/opt/keycloak/providers`.
 
 ## Configuration
 
@@ -60,8 +73,8 @@ the previous step.
 
 ## Usage
 
-You can now exchange the API key for tokens by sending a POST request to the Token endpoint of your realm, and Keycloak 
-will respond with the generated tokens.
+You can now exchange the API key for tokens by sending a POST request to the Token endpoint of your realm, very
+similar to the vanilla ROPC grant. But instead of sending the username and password, we will use our API key:
 
 ```
 curl --location 'http://keycloak:8080/realms/your-realm/protocol/openid-connect/token' \
