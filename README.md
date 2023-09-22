@@ -41,7 +41,7 @@ Choose a name (e.g. "direct grant with api key") and add a single execution:
 ![](doc/add_step.png)
 
 Set the requirement to "Required". You can optionally configure the name of the custom user attribute
-that contains the API key. It defaults to `api-key'.
+that contains the API key. It defaults to `api-key`.
 
 Go back to the authentication flows list and bind your new flow to the direct grant flow.
 
