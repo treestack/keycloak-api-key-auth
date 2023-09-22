@@ -3,8 +3,10 @@
 This Authentication SPI allows the "misuse" of the Resource Owner Password Credentials grant to identify an user by 
 a pre-generated API key stored as a user attribute.
 
-Before using this SPI, please keep in mind that exposing user credentials like API keys to the outside world
-significantly increases the attack surface of your application.
+**Before using this SPI, please keep in mind that exposing user credentials like API keys to the outside world
+significantly increases the attack surface of your application.**
+
+Read this for more information: https://www.scottbrady91.com/oauth/why-the-resource-owner-password-credentials-grant-type-is-not-authentication-nor-suitable-for-modern-applications
 
 ## Resource Owner Password Credentials
 
