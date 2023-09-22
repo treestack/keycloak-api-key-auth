@@ -59,10 +59,8 @@ Choose a name (e.g. "direct grant with api key") and add a single execution:
 
 ![](doc/add_step.png)
 
-Set the requirement to "Required". You can optionally configure the name of the custom user attribute
-that contains the API key. It defaults to `api-key`.
-
-Go back to the authentication flows list and bind your new flow to the direct grant flow.
+Set the requirement to "Required" and go back to the authentication flows list to bind your new flow to the direct 
+grant flow.
 
 ![](doc/bind_flow.png)
 
@@ -70,10 +68,22 @@ Choose binding type "Direct grant flow" and we're done here.
 
 ## Create API key
 
-The API key must be stored as an user attribute. Please create a user and add an attribute with the name you chose in
-the previous step.
+The API key must be stored as an user attribute. You can either create this manually or add an event handler.
+
+### Create API key manually
+
+After crating a new user, go to the "Attributes" tag and add an attribute named `api-key`:
 
 ![](doc/user_attribute.png)
+
+### Event handler
+
+If you want to generate API keys automatically upon user creation, go to the realm settings and add the 
+`create-api-key` event listener.
+
+![](doc/add_event_listener.png)
+
+Now an API key will be generated for you for each new user.
 
 ## Usage
 
