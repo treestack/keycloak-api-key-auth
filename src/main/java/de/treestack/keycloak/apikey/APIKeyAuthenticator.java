@@ -109,7 +109,7 @@ public class APIKeyAuthenticator extends AbstractDirectGrantAuthenticator {
 
     @Override
     public boolean isConfigurable() {
-        return true;
+        return false;
     }
 
     @Override
