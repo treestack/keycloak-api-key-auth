@@ -1,44 +1,48 @@
 [![Maven CI/CD](https://github.com/treestack/keycloak-api-key-auth/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/treestack/keycloak-api-key-auth/actions/workflows/maven-publish.yml)
 ![License](https://img.shields.io/github/license/treestack/keycloak-api-key-auth)
-![Warning](https://img.shields.io/badge/Warning-probably_not_a_good_idea-red)
 ![Release](https://img.shields.io/github/v/release/treestack/keycloak-api-key-auth)
-
 
 # Keycloak API Key authenticator
 
 This Authentication SPI allows the "misuse" of the Resource Owner Password Credentials grant to identify an user by
-a pre-generated API key stored as a user attribute.
+a pre-generated API key stored as a user attribute. If you want to request tokens to access your application's own
+resources, not on behalf of a user,
+the [Client Credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-1.3.4) grant
+might be a better choice.
 
-**Before using this SPI, please keep in mind that exposing user credentials like API keys to the outside world
-significantly increases the attack surface of your application.**
-
-This creates a way to impersonate an user just by knowing an API key that cannot be revoked by the user
-unless you remove the user attribute in Keycloak.
+**Before using this SPI, please keep in mind that exposing user credentials (that includes API keys) to the outside
+world significantly increases the attack surface of your application.**
 
 ## Resource Owner Password Credentials grant
 
-OAuth's Resource Owner Password Credentials (ROPC) grant type, also known as the "password grant," was designed as a
-means of migrating legacy authentication mechanisms to an OAuth tokenized architecture. It essentially swaps user
-credentials for tokens without properly obtaining the user's consent or conducting proper identification.
+OAuth's [Resource Owner Password Credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-1.3.3) (ROPC) grant
+type, also known as the "password grant", was designed as a means of migrating legacy authentication mechanisms to an
+OAuth tokenized architecture. It essentially swaps user credentials for tokens without properly obtaining the user's
+consent or conducting proper identification.
 
-Instead of sending the username and password, we will instead send an API key that's stored as an user attribute.
+Instead of sending the username and password, we will instead send an API key that's stored as an user attribute and
+exchange this API key for a token pair.
 
-This is only suitable for **low security applications** where
+### Security implications
+
+Static credentials like API keys can be easily transferred and used in unintended scenarios. You should not allow
+access to personal information using only an API key.
+
+Furthermore this mechanism is only suitable for applications where
+
 - the resource owner has a trust relationship with the client,
 - proper user identification isn't critical,
-- we don't care about user consent.
+- you don't need to gain user consent.
 
-Please be aware of the security implications.
-
-Further reading: https://www.scottbrady91.com/oauth/why-the-resource-owner-password-credentials-grant-type-is-not-authentication-nor-suitable-for-modern-applications
+For further information please read this excellent blog post by Scott Brady:
+[Don't use the OAuth password grant type](https://www.scottbrady91.com/oauth/why-the-resource-owner-password-credentials-grant-type-is-not-authentication-nor-suitable-for-modern-applications).
 
 ## Requirements
 
-This module was developed for Keycloak 22. For earlier versions please see https://github.com/carbonrider/keycloak-api-key-module.
+This module was developed for Keycloak 22. For earlier versions please see Yogesh Jadhav implementation that inspired
+this SPI: https://github.com/carbonrider/keycloak-api-key-module.
 
 ## Build and deploy
-
-If you still think this is a good idea or have a very niche edge case:
 
 Execute `mvn package` in the root directory. The deployable JAR file will be created in the `target/`-folder.
 
