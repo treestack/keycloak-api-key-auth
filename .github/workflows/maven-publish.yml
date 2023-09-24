@@ -2,7 +2,7 @@ name: Maven CI/CD
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
   pull_request:
     branches: [ master ]
 
@@ -28,6 +28,25 @@ jobs:
 
     - name: Build project
       run: mvn -B package --file pom.xml
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Generate test coverage badge
+    steps:
+
+      - name: Generate a coverage value
+        id: coverage
+        run: |
+          COVERAGE="$( parse-coverage-report )"
+          echo "##[set-output name=lines;]${COVERAGE}%"
+
+      - name: Generate the badge SVG image
+        uses: emibcn/badge-action@v1
+        with:
+          label: 'Test coverage'
+          status: ${{ steps.coverage.outputs.lines }}
+          color: 'blue,555,daf'
+          path: badge.svg
 
   publish:
       runs-on: ubuntu-latest
