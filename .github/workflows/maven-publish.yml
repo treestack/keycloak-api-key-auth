@@ -31,9 +31,9 @@ jobs:
 
   coverage:
     runs-on: ubuntu-latest
-    name: Generate test coverage badge
-    steps:
+    needs: [build]
 
+    steps:
       - name: jacoco-badge-generator
         uses: cicirello/jacoco-badge-generator@v2.11.0
 
