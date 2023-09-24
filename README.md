@@ -1,4 +1,5 @@
 [![Maven CI/CD](https://github.com/treestack/keycloak-api-key-auth/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/treestack/keycloak-api-key-auth/actions/workflows/maven-publish.yml)
+![Coverage](https://treestack-static.s3.eu-central-1.amazonaws.com/badges/jacoco.svg)
 ![License](https://img.shields.io/github/license/treestack/keycloak-api-key-auth)
 ![Release](https://img.shields.io/github/v/release/treestack/keycloak-api-key-auth)
 
