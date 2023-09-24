@@ -49,7 +49,7 @@ jobs:
             distribution: temurin
             java-version: 17
         
-        - run: mvn -B package --file pom.xml -DskipTests
+        - run: mvn -B package
         
         - run: mkdir staging && cp target/*.jar staging
         
