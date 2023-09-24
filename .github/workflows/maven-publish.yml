@@ -27,15 +27,10 @@ jobs:
         restore-keys: ${{ runner.os }}-m2  
 
     - name: Build project
-      run: mvn -B package --file pom.xml
+      run: mvn -B package
 
-  coverage:
-    runs-on: ubuntu-latest
-    needs: [build]
-
-    steps:
-      - name: jacoco-badge-generator
-        uses: cicirello/jacoco-badge-generator@v2.11.0
+    - name: jacoco-badge-generator
+      uses: cicirello/jacoco-badge-generator@v2.11.0
 
   publish:
       runs-on: ubuntu-latest
