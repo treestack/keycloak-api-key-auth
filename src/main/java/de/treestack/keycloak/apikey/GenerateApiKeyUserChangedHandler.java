@@ -8,8 +8,6 @@ import org.keycloak.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-
 public class GenerateApiKeyUserChangedHandler implements UserEventListenerProviderFactory.UserChangedHandler {
 
     protected static final int API_KEY_LENGTH = 16;
