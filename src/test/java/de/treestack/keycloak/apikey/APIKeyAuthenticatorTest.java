@@ -3,6 +3,7 @@ package de.treestack.keycloak.apikey;
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.authentication.AuthenticationFlowContext;
@@ -13,6 +14,7 @@ import org.keycloak.models.UserModel;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -24,11 +26,15 @@ import static de.treestack.keycloak.apikey.APIKeyAuthenticator.API_KEY_FORM_FIEL
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 final public class APIKeyAuthenticatorTest {
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private AuthenticationFlowContext ctx;
+
+    @BeforeEach
+    public void init() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void apiKeyNotGivenReturnsUnauthorized() {
@@ -83,6 +89,20 @@ final public class APIKeyAuthenticatorTest {
         assertFalse(auth.isConfigurable(), "not configurable");
         assertFalse(auth.isUserSetupAllowed(), "user setup not allowed");
         assertTrue(auth.getConfigProperties().isEmpty(), "no configuration properties");
+    }
+
+    @Test
+    void properDisplayAndHelpText() {
+        var auth = new APIKeyAuthenticator();
+        assertNotNull(auth.getDisplayType(), "display type");
+        assertNotNull(auth.getHelpText(), "help text");
+        assertNull(auth.getReferenceCategory(), "no reference category");
+    }
+
+    @Test
+    void correctProviderId() {
+        var auth = new APIKeyAuthenticator();
+        assertEquals(APIKeyAuthenticator.PROVIDER_ID, auth.getId());
     }
 
     @Test

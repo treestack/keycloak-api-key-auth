@@ -84,9 +84,9 @@ public abstract class UserEventListenerProviderFactory
                 });
     }
 
-    protected abstract static class UserChangedHandler {
-        protected abstract void onUserAdded(KeycloakSession session, RealmModel realm, UserModel user);
+    public interface UserChangedHandler {
+        void onUserAdded(KeycloakSession session, RealmModel realm, UserModel user);
 
-        protected abstract void onUserRemoved(KeycloakSession session, RealmModel realm, UserModel user);
+        void onUserRemoved(KeycloakSession session, RealmModel realm, UserModel user);
     }
 }
