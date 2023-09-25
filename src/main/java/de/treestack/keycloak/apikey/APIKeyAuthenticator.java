@@ -89,6 +89,7 @@ public class APIKeyAuthenticator extends AbstractDirectGrantAuthenticator {
 
     @Override
     public void setRequiredActions(KeycloakSession session, RealmModel realm, UserModel user) {
+        // Intentionally left blank
     }
 
     @Override
