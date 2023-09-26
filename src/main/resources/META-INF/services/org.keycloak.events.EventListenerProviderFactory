@@ -1,1 +1,1 @@
-de.treestack.keycloak.apikey.CreateApiKeyProviderFactory
+de.treestack.keycloak.apikey.events.UserAddedEventListenerProviderFactory

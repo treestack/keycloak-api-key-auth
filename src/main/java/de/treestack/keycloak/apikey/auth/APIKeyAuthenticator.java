@@ -1,4 +1,4 @@
-package de.treestack.keycloak.apikey;
+package de.treestack.keycloak.apikey.auth;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;

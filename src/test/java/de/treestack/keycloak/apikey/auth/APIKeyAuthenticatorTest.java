@@ -1,4 +1,4 @@
-package de.treestack.keycloak.apikey;
+package de.treestack.keycloak.apikey.auth;
 
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -19,15 +19,21 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import static de.treestack.keycloak.apikey.APIKeyAuthenticator.API_KEY_ATTRIBUTE;
-import static de.treestack.keycloak.apikey.APIKeyAuthenticator.API_KEY_FORM_FIELD;
+import static de.treestack.keycloak.apikey.auth.APIKeyAuthenticator.API_KEY_ATTRIBUTE;
+import static de.treestack.keycloak.apikey.auth.APIKeyAuthenticator.API_KEY_FORM_FIELD;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-final public class APIKeyAuthenticatorTest {
+class APIKeyAuthenticatorTest {
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private AuthenticationFlowContext ctx;
+
+    private static MultivaluedMap<String, String> createFormData(String apiKey) {
+        var formData = new MultivaluedHashMap<String, String>();
+        formData.put(API_KEY_FORM_FIELD, Collections.singletonList(apiKey));
+        return formData;
+    }
 
     @BeforeEach
     public void init() {
@@ -71,7 +77,7 @@ final public class APIKeyAuthenticatorTest {
 
         auth.authenticate(ctx);
 
-        verify(ctx).setUser(eq(user));
+        verify(ctx).setUser(user);
         verify(ctx).success();
     }
 
@@ -110,12 +116,6 @@ final public class APIKeyAuthenticatorTest {
         assertTrue(requirementList.contains(AuthenticationExecutionModel.Requirement.REQUIRED));
         assertTrue(requirementList.contains(AuthenticationExecutionModel.Requirement.ALTERNATIVE));
         assertTrue(requirementList.contains(AuthenticationExecutionModel.Requirement.DISABLED));
-    }
-
-    private static MultivaluedMap<String, String> createFormData(String apiKey) {
-        var formData = new MultivaluedHashMap<String, String>();
-        formData.put(API_KEY_FORM_FIELD, Collections.singletonList(apiKey));
-        return formData;
     }
 
 
