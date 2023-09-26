@@ -1,4 +1,4 @@
-package de.treestack.keycloak.apikey;
+package de.treestack.keycloak.apikey.auth;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
@@ -89,6 +89,7 @@ public class APIKeyAuthenticator extends AbstractDirectGrantAuthenticator {
 
     @Override
     public void setRequiredActions(KeycloakSession session, RealmModel realm, UserModel user) {
+        // Intentionally left blank
     }
 
     @Override
