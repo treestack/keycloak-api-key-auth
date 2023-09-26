@@ -104,3 +104,36 @@ curl --location 'http://keycloak:8080/realms/your-realm/protocol/openid-connect/
   --data-urlencode 'client_id=client-name' \
   --data-urlencode 'api_key=1230f76a-4325-4563-9af6-bea7f4d5b622'
 ```
+
+### Quarkus OIDC client example
+
+Instead of sending raw POSTs, you could also use [Quarkus' OIDC client](https://quarkus.io/guides/security-openid-connect-client-reference).
+
+```java
+@ApplicationScoped
+class TokenExchange {
+    private final OidcClient client;
+
+    public TokenExchange(@NotNull OidcClient client) {
+        this.client = client;
+    }
+
+    @NotNull
+    public Uni<Tokens> loginWithApiKey(@NotNull String apiKey) {
+        var params = new HashMap<String, String>();
+        params.put("api_key", apiKey);
+        Uni<Tokens> tokens = this.client.getTokens(params);
+    }
+}
+```
+
+Configuration:
+
+```yml
+quarkus:
+  oidc-client:
+    auth-server-url: http://localhost:8081/realms/your-realm
+    client-id: client-name
+    grant:
+      type: password
+```
